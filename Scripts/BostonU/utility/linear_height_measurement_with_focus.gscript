@@ -1,0 +1,23 @@
+SETLOG "MOD1_TOP_NOVAC.txt"
+CLEARLOG
+COPY $a {781.562740,272.977473,63.936428}
+COPY $b {823.002733,272.977463,63.936523}
+COPY $steps 20
+FLEXWRITE "vision.autofocus.step_size" 0.02
+SUB $delta $b $a
+INVERT $step_inv $steps
+MUL $step $delta {$step_inv,$step_inv,$step_inv}
+
+COPY $focus $a
+COPY $count 0
+@LOOP
+    GOTOIF @END `$count>$steps`
+    MUL $point_offset $step {$count,$count,$count}
+    ADD $point $a $point_offset
+    PRINT "Moving to: %v" $point
+    MOVETO {$point.x,$point.y,$focus.z} 50
+    AUTOFOCUS $focus 0.5 "" autoclose
+    PRINT "Focus=%v" $focus 
+    INC $count $count
+    GOTO @LOOP
+@END

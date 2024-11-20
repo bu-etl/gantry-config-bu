@@ -1,0 +1,134 @@
+clearlog
+copy $target_pos {655.739552,370.534922,79.531179}
+
+flexwrite geometry.calibration_part.fid_tl {-10,-8.85,0}
+flexwrite geometry.calibration_part.fid_tr {10,-8.85,0}
+flexwrite geometry.calibration_part.fid_bl {-10,8.85,0}
+flexwrite geometry.calibration_part.fid_br {10,8.85,0}
+
+copy $chuck_num 4
+copy $pos_num 13
+
+copy $counter 0
+
+@LOOP_START
+########
+movename etl_chuck_1
+choicepopup $_ "Click a button to continue"
+mul $target_rot $counter 30
+SUB $target_rot $target_rot 180
+SETVAC "etl_chuck_{$chuck_num}_pos_{$pos_num}" 1
+CALL @SURVEY_PART $chuck_num $pos_num -> $init_pos $init_rot
+
+loadtool etl_picker_tool
+pickpart $init_pos $init_rot "etl_chuck_{$chuck_num}_pos_{$pos_num}" etl_chuck_4
+
+placepart $target_pos $target_rot "" etl_chuck_2
+
+unloadtool
+CALL @SURVEY_CORRECTED 2 $target_pos $target_rot -> $final_pos $final_rot
+
+CALL @PRINT_SURVEY_RESULTS $target_pos $target_rot $final_pos $final_rot 1
+sub $misplacement $final_pos $target_pos
+copy [$counter] $misplacement
+#######
+INC $counter $counter # counter = counter + 1
+GOTOIF @LOOP_START `$counter<12`
+
+FITCIRCLE $center $radius $residual 0 12
+
+END
+
+@PRINT_SURVEY_RESULTS(target_pos,target_rot,meas_pos,meas_rot,chip_num)
+    PRINT "CHIP %d:" $chip_num
+    PRINT "    target: %v | %f deg" $target_pos $target_rot
+    PRINT "    actual: %v | %f deg" $meas_pos $meas_rot
+    SUB $pos_err $meas_pos $target_pos
+    SUB $rot_err $meas_rot $target_rot
+    PRINT "    delta:  %v | %f deg" $pos_err $rot_err
+    RETURN
+
+
+@SURVEY_CORRECTED(chuck_num,target_pos,target_rot)
+# Arguments:
+    #  $chuck_num - 
+    #  $pos - 
+    #  $rot -
+    FLEXREAD $tr_local geometry.calibration_part.fid_tr  
+    FLEXREAD $tl_local geometry.calibration_part.fid_tl
+    FLEXREAD $bl_local geometry.calibration_part.fid_bl
+    FLEXREAD $br_local geometry.calibration_part.fid_br
+
+    TRANSFORML2G $tr_global $tr_local $target_pos $target_rot
+    TRANSFORML2G $tl_global $tl_local $target_pos $target_rot
+    TRANSFORML2G $bl_global $bl_local $target_pos $target_rot
+    TRANSFORML2G $br_global $br_local $target_pos $target_rot
+
+    #this is to get corrected centers and orientation, the code above gives general area
+    MOVENAME "etl_chuck_{$chuck_num}"
+    #Routine to set up inital position of metal piece
+    CALL @ACQUIREFIDUCIAL $tl_global -> $tl_corrected
+    CALL @ACQUIREFIDUCIAL $tr_global -> $tr_corrected
+    CALL @ACQUIREFIDUCIAL $bl_global -> $bl_corrected
+    CALL @ACQUIREFIDUCIAL $br_global -> $br_corrected
+    
+    FIT $pos $rot calibration_part $tr_corrected $br_corrected $bl_corrected $tl_corrected
+    QUAT2EULER $phi $_ $_ $rot
+    RETURN $pos $phi
+
+
+@SURVEY_PART(chuck_num,pos_num,is_top)
+    # Arguments:
+    #  $chuck_num - 
+    #  $pos_num - 
+	   #  $is_top - 1 for survey position of top, 0 for bottom
+	
+    SETLIGHT 40
+	
+    FLEXREAD $tr_local geometry.calibration_part.fid_tr  
+    FLEXREAD $tl_local geometry.calibration_part.fid_tl
+    FLEXREAD $bl_local geometry.calibration_part.fid_bl
+    FLEXREAD $br_local geometry.calibration_part.fid_br
+
+    copy $pos_default {636.687990,184.997297,77.07}
+    copy $rot_default 0
+	
+    #converts the local coordinates to global gantry coordinates usint start location and orientation
+    TRANSFORML2G $tr_global $tr_local $pos_default $rot_default
+    TRANSFORML2G $tl_global $tl_local $pos_default $rot_default
+    TRANSFORML2G $bl_global $bl_local $pos_default $rot_default
+    TRANSFORML2G $br_global $br_local $pos_default $rot_default
+
+    #this is to get corrected centers and orientation, the code above gives general area
+    MOVENAME "etl_chuck_{$chuck_num}"
+    #Routine to set up inital position of metal piece
+    CALL @ACQUIREFIDUCIAL $tl_global -> $tl_corrected
+    CALL @ACQUIREFIDUCIAL $tr_global -> $tr_corrected
+    CALL @ACQUIREFIDUCIAL $bl_global -> $bl_corrected
+    CALL @ACQUIREFIDUCIAL $br_global -> $br_corrected
+
+    # Turns measured corners or fiducials into center and orientation
+    FIT $pos $rot calibration_part $tr_corrected $br_corrected $bl_corrected $tl_corrected
+    QUAT2EULER $phi $_ $_ $rot
+    RETURN $pos $phi
+
+@ACQUIREFIDUCIAL(start_pos)
+    # Arguments:
+    #  $start_pos - Position to initially search for the fiducial
+	
+    MOVETO $start_pos 50
+    WAIT 100
+
+    GOTO @manual_fiducial_acquisition
+
+    SETERRORMODE setvar
+    FINDFID $fid_position ETL_PCB_Mockup
+    GOTOIF @manual_fiducial_acquisition $ERR
+    SETERRORMODE default
+    RETURN $fid_position
+    
+    @manual_fiducial_acquisition
+    SETERRORMODE default
+    VIDEO
+    getpos $fid_position
+    RETURN $fid_position

@@ -1,0 +1,83 @@
+CLEARLOG
+SETLOG "ETROCV0_{timestamp}.log"
+# Width: 21.1
+# Height: 23.25
+flexwrite geometry.etroc2.fid_tr {10.55,-11.625,0}
+flexwrite geometry.etroc2.fid_tl {-10.55,-11.625,0}
+flexwrite geometry.etroc2.fid_br {10.55,11.625,0}
+flexwrite geometry.etroc2.fid_bl {-10.55,11.625,0}
+
+copy $etroc_init_pos {512.352336,307.037250,76.985246}
+copy $etroc_init_rot 0
+
+copy $pcb_init_pos {667.811970,267.177240,63.289043}
+copy $pcb_init_rot -90
+
+copy $s 40
+
+###################
+# Survey ETROC    #
+###################
+SETVAC etl_chuck_4_pos_1 1
+movename etl_chuck_4
+
+transforml2g $pos &geometry.etroc2.fid_tr $etroc_init_pos $etroc_init_rot
+moveto $pos $s
+video
+getpos $tr
+
+transforml2g $pos &geometry.etroc2.fid_tl $etroc_init_pos $etroc_init_rot
+moveto $pos $s
+video
+getpos $tl
+
+transforml2g $pos &geometry.etroc2.fid_br $etroc_init_pos $etroc_init_rot
+moveto $pos $s
+video
+getpos $br
+
+transforml2g $pos &geometry.etroc2.fid_bl $etroc_init_pos $etroc_init_rot
+moveto $pos $s
+video
+getpos $bl
+
+FIT $etroc_pos $etroc_rot $_ etroc2 $tr $br $bl $tl
+
+###################
+# Survey Mod PCB  #
+###################
+SETVAC etl_chuck_3 1
+movename etl_chuck_3
+
+transforml2g $pos &geometry.etroc2.fid_tr $pcb_init_pos $pcb_init_rot
+moveto $pos $s
+video
+getpos $tr
+
+transforml2g $pos &geometry.etroc2.fid_tl $pcb_init_pos $pcb_init_rot
+moveto $pos $s
+video
+getpos $tl
+
+transforml2g $pos &geometry.etroc2.fid_br $pcb_init_pos $pcb_init_rot
+moveto $pos $s
+video
+getpos $br
+
+transforml2g $pos &geometry.etroc2.fid_bl $pcb_init_pos $pcb_init_rot
+moveto $pos $s
+video
+getpos $bl
+
+FIT $pcb_pos $pcb_rot $_ etroc2 $tr $br $bl $tl
+
+###################
+# Pick & Place    #
+###################
+LOADTOOL etl_picker_tool
+
+PICKPART $etroc_pos $etroc_rot etl_chuck_4_pos_1 etl_chuck_4
+PLACEPART $pcb_pos $pcb_rot "" etl_chuck_3
+
+UNLOADTOOL
+setvac etl_chuck_3 0
