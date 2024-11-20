@@ -1,0 +1,6 @@
+[submodule "Scripts/TFPXModules"]
+	path = Scripts/TFPXModules
+	url = git@github.com:souvik1982/gscript-TFPXModules.git
+[submodule "Scripts/ETLModules"]
+	path = Scripts/ETLModules
+	url = git@github.com:bu-etl/gscript-ETLModules.git
