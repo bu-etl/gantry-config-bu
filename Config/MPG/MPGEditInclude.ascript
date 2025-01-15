@@ -1,0 +1,48 @@
+'				MPGEditInclude.ascript 
+'
+' This file must be included in program automation when using MPG.ascript 
+'
+' Review each of the following defines to make sure 
+' that the axis names match the system where the MPG
+' is being used.  
+
+' Define the names of the axes in your system by changing the 
+' axis in each of the next six program lines. Make sure
+' that you use the correct upper or lower case of the axis name.
+
+' Ex/ #define AxisX ZZ, where "ZZ" is the axis you want to assign to the first axis spot on the handwheel
+
+' 1st position on axis selector switch
+#define AxisX X
+' 2nd position on axis selector switch
+#define AxisY Y
+' 3rd position on axis selector switch
+#define AxisZ Z
+' 4th position on axis selector switch
+#define AxisU U
+
+' Define the distance for one tick (or change) of the MPG handWheel. This value will be multiplied by the selected multiplier on the handwheel
+#define XBaseIncr 0.01
+#define YBaseIncr 0.01
+#define ZBaseIncr 0.01
+#define UBaseIncr 0.01
+
+' This is the name of the axis that has the handwheel connected to its auxiliary encoder channel
+#define Ench Y
+
+' This is the name of the axis that has digial I/O connected to the handwheel
+#define IOAxis Y
+
+' Modify the digital input mapping to reflect the wiring of the MPG in the system
+' Define the inputs/state for the 6 axis switches.
+#define Xin			(DigitalInputGet(IOAxis, 0) == 1)
+#define Yin			(DigitalInputGet(IOAxis, 1) == 1)
+#define Zin 		(DigitalInputGet(IOAxis, 2) == 1)
+#define Uin 		(DigitalInputGet(IOAxis, 3) == 1)
+
+' Define the inputs/state for the 3 mult. switches.
+#define MultX1 		(DigitalInputGet(IOAxis, 6) == 1)
+#define MultX10		(DigitalInputGet(IOAxis, 7) == 1)
+
+' Define the LED output for the handwheel
+#define LedOutput (DigitalInputGet(IOAxis, 8) == 1)

@@ -1,0 +1,334 @@
+'				MPG.ascript 
+'
+' This MPG program can be use with all hardware.
+' The appropriate MPGInclude.ascript file must be 
+' included based on the hardware type you are using.
+' Refer to the MPG manual for more information.
+' After this program is configured correctly, add the
+' program to program automation and set to autorun on any
+' task other than task 1.  
+
+#include "MPGStaticInclude.ascript"
+#include "MPGEditInclude.ascript" 
+
+' MPG active/enabled flag.
+var $Active
+' Message present. All hand commands stopped.
+var $Msg, $Stopped
+
+struct Variables
+	$XIncrement as real
+	$YIncrement as real
+	$ZIncrement as real
+	$UIncrement as real
+	$LastAxisSelected as real
+end
+
+var $Variables as Variables
+
+
+' Program loops forever handling the MPG functionality.
+program
+    EnableMPG
+	' An axis is being controlled by the MPG.
+	$Variables.LastAxisSelected = 0
+	' The MPG is active.
+	$Active = 0
+	' The distance per MPG count.
+	$Variables.XIncrement = 0
+	$Variables.YIncrement = 0
+	$Variables.ZIncrement = 0
+	$Variables.UIncrement = 0
+	' Any user messages on the display.
+	$Msg = 0
+	' All axes are stopped.
+	$Stopped = 1
+	
+
+	while(true)                        
+		' Wait for the MPG to be active.
+	   	while(MPGOff)  	 	 
+			' if the axis is in motion
+			if($Stopped == 0)        
+				' disable the MPG for all axes.
+	         	StopAll()             
+	      	end
+	   	  	
+			' Test every 0.2 seconds.
+	      	Dwell(.2)
+		end
+	   	'Make sure the task cannot be stopped.
+		ParameterSetTaskValue(TaskGetIndex(), TaskParameter.TaskTerminationAxes, 0)
+		
+		' Turn on the MPG LED. 
+		DigitalOutputSet(IOAxis, LedOutput, 1)
+		
+		' The enable switch clears all increment and axis inputs, if FALSE
+		' read increment switches & test/set $Active variable
+		ReadIncr()                  
+		if($Active)
+			' Read axis switches.
+			ReadAxis()               
+		else              
+			' Enable button was released.
+			' Disable the MPG for all axes.
+			StopAll()                
+		end
+	end
+end
+
+
+' Read the 3 increment switches
+' Set desired multiplier for ratio
+function ReadIncr()  
+	'X1
+	//if(DigitalInputGet(IOAxis, MultX1))  
+	if(MultX1)      
+		if($Variables.XIncrement != XBaseIncr)
+			$Variables.XIncrement = XBaseIncr
+			$Variables.YIncrement = YBaseIncr
+			$Variables.ZIncrement = ZBaseIncr
+			$Variables.UIncrement = UBaseIncr
+			//Resolution has changed.  Clear the last axis selected
+			//to force a re-enable of gearing on the active axis
+			$Variables.LastAxisSelected = 0
+		end
+		$Active = 1 
+	' X10
+	elseif(MultX10)
+		if($Variables.XIncrement != XBaseIncr * 10)
+			$Variables.XIncrement = (XBaseIncr * 10)
+			$Variables.YIncrement = (YBaseIncr * 10)
+			$Variables.ZIncrement = (ZBaseIncr * 10)
+			$Variables.UIncrement = (UBaseIncr * 10)
+			//Resolution has changed.  Clear the last axis selected
+			//to force a re-enable of gearing on the active axis
+			$Variables.LastAxisSelected = 0
+		end
+		' pendant is active
+		$Active = 1        
+	' X100
+	elseif((MultX1 ==0) && (MultX10 == 0))    
+		if($Variables.XIncrement != XBaseIncr * 100)
+			$Variables.XIncrement = (XBaseIncr * 100)
+			$Variables.YIncrement = (YBaseIncr * 100)
+			$Variables.ZIncrement = (ZBaseIncr * 100)
+			$Variables.UIncrement = (UBaseIncr * 100)
+			//Resolution has changed.  Clear the last axis selected
+			//to force a re-enable of gearing on the active axis
+			$Variables.LastAxisSelected = 0
+		end
+		' pendant is active
+		$Active = 1  
+	' X0
+	else           
+		' disable MPG for all axes 
+		StopAll()                      
+		$Variables.XIncrement = 0
+		$Variables.YIncrement = 0
+		$Variables.ZIncrement = 0
+		$Variables.UIncrement = 0
+		' pendant is inactive
+		$Active = 0                
+	end
+end
+
+
+' Read the 6 axis switches
+function ReadAxis()                    
+	if(Xin)
+		if(StatusGetAxisItem(AxisX, AxisDataSignal.AxisStatus, AxisStatus.CommandValid) == AxisStatus.CommandValid)
+			' if different axis
+			if($Variables.LastAxisSelected != 1)				
+				StopAll()
+				$Variables.LastAxisSelected = 1
+				HandOn() 
+				' all axes not stopped
+				$Stopped = 0            
+			' if same axis and MPG disabled
+			elseif($Stopped)
+				' re-enable the MPG
+				HandleAxisFault()		
+				HandOn()        	
+			end
+			if($Msg)
+				' clear axis disabled message
+				ClearMsg()	   
+			end
+		else 
+			if(!$Msg)
+				AppMessageDisplay("X Axis is not enabled!", MessageSeverity.Error)
+				$Msg = 1
+			end
+		end
+   	elseif(Yin)
+		if(StatusGetAxisItem(AxisY, AxisDataSignal.AxisStatus, AxisStatus.CommandValid) == AxisStatus.CommandValid)
+			' if different axis
+			if($Variables.LastAxisSelected != 2)				
+				StopAll()
+				$Variables.LastAxisSelected = 2
+				HandOn() 
+				' all axes not stopped
+				$Stopped = 0   
+			' if same axis and MPG disabled
+			elseif($Stopped)
+				' re-enable the MPG
+				HandleAxisFault()		
+				HandOn()
+			end
+			if($Msg)
+				' clear axis disabled message
+				ClearMsg()	   
+			end
+		else 
+			if(!$Msg)
+				AppMessageDisplay("Y Axis is not enabled!", MessageSeverity.Error)
+				$Msg = 1
+			end
+		end
+  	elseif(Zin)
+		if(StatusGetAxisItem(AxisZ, AxisDataSignal.AxisStatus, AxisStatus.CommandValid) == AxisStatus.CommandValid)
+			' if different axis
+			if($Variables.LastAxisSelected != 3)				
+				StopAll()
+				$Variables.LastAxisSelected = 3
+				HandOn() 
+				' all axes not stopped
+				$Stopped = 0               
+			' if same axis and MPG disabled
+			elseif($Stopped)
+				' re-enable the MPG
+				HandleAxisFault()		
+				HandOn() 
+			end
+			if($Msg)
+				' clear axis disabled message
+				ClearMsg()	   
+			end
+		else 
+			if(!$Msg)
+				AppMessageDisplay("Z Axis is not enabled!", MessageSeverity.Error)
+				$Msg = 1
+			end
+		end                        
+   elseif(Uin)                       
+		if(StatusGetAxisItem(AxisU, AxisDataSignal.AxisStatus, AxisStatus.CommandValid) == AxisStatus.CommandValid)
+			' if different axis
+			if($Variables.LastAxisSelected != 4)				
+				StopAll()
+				$Variables.LastAxisSelected = 4
+				HandOn() 
+				' all axes not stopped
+				$Stopped = 0               
+			' if same axis and MPG disabled
+			elseif($Stopped)
+				' re-enable the MPG
+				HandleAxisFault()
+				HandOn() 
+			end
+			if($Msg)
+				' clear axis disabled message
+				ClearMsg()	   
+			end
+		else 
+			if(!$Msg)
+				AppMessageDisplay("U Axis is not enabled!", MessageSeverity.Error)
+				$Msg = 1
+			end
+		end
+  
+		
+	else   
+		' disable MPG for all axes
+		StopAll()                
+	end
+end
+
+
+' Disable MPG for all axes
+function StopAll()  
+	' no last axis
+	$Variables.LastAxisSelected = 0				
+    if( !$Stopped )
+		HandAllOff()
+		Dwell(0.2)
+      	ClearMsg()
+		' all MPG commands now disabled
+      	$Stopped = 1            
+    end
+end
+
+
+' Clear Message Display
+function ClearMsg()
+	' clear all messages
+	AppMessageDisplayDismiss()
+	$Msg = 0
+end
+
+
+' Assign Gearing for Selected Axis
+' Set Ratio = (((Counts/Unit Parameter) * Incr) / 4)
+' Set Filter as Filtered to enable smooth transitions
+function HandOn()	
+	if($Variables.LastAxisSelected == 1)
+		GearingSetLeaderAxis(AxisX, Ench, GearingSource.AuxiliaryFeedback)
+		GearingSetRatio(AxisX, ((ParameterGetAxisValue(AxisX, AxisParameter.CountsPerUnit) * $Variables.XIncrement) / 4))
+		GearingOn(AxisX, GearingFilter.Filtered)
+		
+	elseif($Variables.LastAxisSelected == 2)
+		GearingSetLeaderAxis(AxisY, Ench, GearingSource.AuxiliaryFeedback)
+		GearingSetRatio(AxisY, ((ParameterGetAxisValue(AxisY, AxisParameter.CountsPerUnit) * $Variables.YIncrement) / 4))
+		GearingOn(AxisY, GearingFilter.Filtered)
+		
+	elseif($Variables.LastAxisSelected == 3)
+		GearingSetLeaderAxis(AxisZ, Ench, GearingSource.AuxiliaryFeedback)
+		GearingSetRatio(AxisZ, ((ParameterGetAxisValue(AxisZ, AxisParameter.CountsPerUnit) * $Variables.ZIncrement) / 4))
+		GearingOn(AxisZ, GearingFilter.Filtered)
+		
+	elseif($Variables.LastAxisSelected == 4)
+		GearingSetLeaderAxis(AxisU, Ench, GearingSource.AuxiliaryFeedback)
+		GearingSetRatio(AxisU, ((ParameterGetAxisValue(AxisU, AxisParameter.CountsPerUnit) * $Variables.UIncrement) / 4))
+		GearingOn(AxisU, GearingFilter.Filtered)
+		
+			
+	end
+end
+
+
+'Turn Gearing Off on all Axes
+function HandAllOff()
+	GearingOff(AxisX)
+	GearingOff(AxisY)
+	GearingOff(AxisZ)
+	GearingOff(AxisU)
+	    
+end
+
+
+' Check Axis
+' Wait for Motion Done
+' Acknowledge Faults
+function HandleAxisFault()
+	if($Variables.LastAxisSelected == 1 )
+		WaitForMotionDone(AxisX)
+		FaultAcknowledge(AxisX)
+		WaitForMotionDone(AxisX)  
+		   
+	elseif($Variables.LastAxisSelected == 2)
+		WaitForMotionDone(AxisY)
+		FaultAcknowledge(AxisY)
+		WaitForMotionDone(AxisY)  
+		   
+	elseif($Variables.LastAxisSelected == 3)         
+		WaitForMotionDone(AxisZ)
+		FaultAcknowledge(AxisZ)
+		WaitForMotionDone(AxisZ)  
+		   
+	elseif($Variables.LastAxisSelected == 4)
+		WaitForMotionDone(AxisU)
+		FaultAcknowledge(AxisU)
+		WaitForMotionDone(AxisU) 
+		
+	end
+end

@@ -5,10 +5,8 @@
 enable_imaqdx: True
 
 camera.gantryhead.CameraGroup: 1
-# camera.gantryhead.driver: ueye
-# camera.gantryhead.serial_number: "4103643853"
 camera.gantryhead.driver: imaqdx
-camera.gantryhead.serial_number: "UI327xCP-M_4103643853 |  | 11872060072500839368"
+camera.gantryhead.serial_number: "peak Capture Device |  | 10345749882783800426"
 camera.gantryhead.FOV-x: 1.400
 camera.gantryhead.FOV-y: 1.048
 camera.gantryhead.horizontalMirror: False
@@ -86,22 +84,23 @@ manifold.port.12: cDAQ1Mod1/port0/line12
 manifold.port.13: cDAQ1Mod1/port0/line13
 manifold.port.14: cDAQ1Mod1/port0/line14
 manifold.port.15: cDAQ1Mod1/port0/line15
-manifold.port.16: cDAQ1Mod1/port0/line16
-manifold.port.17: cDAQ1Mod1/port0/line17
-manifold.port.18: cDAQ1Mod1/port0/line18
-manifold.port.19: cDAQ1Mod1/port0/line19
-manifold.port.20: cDAQ1Mod1/port0/line20
-manifold.port.21: cDAQ1Mod1/port0/line21
-manifold.port.22: cDAQ1Mod1/port0/line22
-manifold.port.23: cDAQ1Mod1/port0/line23
-manifold.port.24: cDAQ1Mod1/port0/line24
-manifold.port.25: cDAQ1Mod1/port0/line25
-manifold.port.26: cDAQ1Mod1/port0/line26
-manifold.port.27: cDAQ1Mod1/port0/line27
-manifold.port.28: cDAQ1Mod1/port0/line28
-manifold.port.29: cDAQ1Mod1/port0/line29
-manifold.port.30: cDAQ1Mod1/port0/line30
-manifold.port.31: cDAQ1Mod1/port0/line31
+
+manifold.port.16: cDAQ1Mod2/port0/line0
+manifold.port.17: cDAQ1Mod2/port0/line1
+manifold.port.18: cDAQ1Mod2/port0/line2
+manifold.port.19: cDAQ1Mod2/port0/line3
+manifold.port.20: cDAQ1Mod2/port0/line4
+manifold.port.21: cDAQ1Mod2/port0/line5
+manifold.port.22: cDAQ1Mod2/port0/line6
+manifold.port.23: cDAQ1Mod2/port0/line7
+manifold.port.24: cDAQ1Mod2/port0/line8
+manifold.port.25: cDAQ1Mod2/port0/line9
+manifold.port.26: cDAQ1Mod2/port0/line10
+manifold.port.27: cDAQ1Mod2/port0/line11
+manifold.port.28: cDAQ1Mod2/port0/line12
+manifold.port.29: cDAQ1Mod2/port0/line13
+manifold.port.30: cDAQ1Mod2/port0/line14
+manifold.port.31: cDAQ1Mod2/port0/line15
 
 motion.travel_speed: 150  # mm/s
 
