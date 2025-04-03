@@ -106,33 +106,6 @@ vision.log_directory: C:\Users\cfang\Desktop\nebraska-silicon-lab\pixel-gantry-c
 vision.autofocus.step_size: 0.075 # mm
 vision.autofocus.delay: 50 # ms
 
-vision.FPIX_HDI.method: find_patches
-vision.FPIX_HDI.shrinkFactor: 4
-vision.FPIX_HDI.dilateSize: 5
-vision.FPIX_HDI.sizeMin: 0.12
-vision.FPIX_HDI.sizeMax: 0.18
-vision.FPIX_HDI.colorGroups: 2
-vision.FPIX_HDI.aspectRatioMin: 0.9
-vision.FPIX_HDI.aspectRatioMax: 1.1
-
-vision.FPIX_BBM.method: find_patches
-vision.FPIX_BBM.shrinkFactor: 8
-vision.FPIX_BBM.dilateSize: 3
-vision.FPIX_BBM.sizeMin: 0.01
-vision.FPIX_BBM.sizeMax: 0.02
-vision.FPIX_BBM.colorGroups: 3
-vision.FPIX_BBM.aspectRatioMin: 0.9
-vision.FPIX_BBM.aspectRatioMax: 1.1
-
-vision.ETL_PCB_Mockup.method: find_patches
-vision.ETL_PCB_Mockup.shrinkFactor: 4
-vision.ETL_PCB_Mockup.dilateSize: 5
-vision.ETL_PCB_Mockup.sizeMin: 0.13
-vision.ETL_PCB_Mockup.sizeMax: 0.21
-vision.ETL_PCB_Mockup.colorGroups: 3
-vision.ETL_PCB_Mockup.aspectRatioMin: 0.9
-vision.ETL_PCB_Mockup.aspectRatioMax: 1.1
-
 #================================================
 #====== "Safe" (ie graph-based) motion data
 #================================================
