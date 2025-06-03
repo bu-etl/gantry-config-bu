@@ -1,11 +1,12 @@
 #====== Hardware configuration
 #================================================
 
-enable_imaqdx: True
+enable_imaqdx: False
 
 camera.gantryhead.CameraGroup: 1
-camera.gantryhead.driver: imaqdx
-camera.gantryhead.serial_number: "peak Capture Device |  | 10345749882783800426"
+camera.gantryhead.driver: peak
+camera.gantryhead.serial_number: "U3-328xCP-M|4108616891"
+# camera.gantryhead.config_file: "cam_config_gantryhead.cset"
 camera.gantryhead.FOV-x: 1.66
 camera.gantryhead.FOV-y: 1.40
 camera.gantryhead.horizontalMirror: False
@@ -53,6 +54,7 @@ manifold.port.31: cDAQ1Mod1/port0/line15
 
 vacuum.gantry_head_outer: 18
 vacuum.gantry_head_inner: 20
+
 vacuum.etl_chuck_1_pos_1: 15
 vacuum.etl_chuck_1_pos_2: 13
 vacuum.etl_chuck_1_pos_3: 2
@@ -71,6 +73,12 @@ vacuum.etl_chuck_1_pos_15: 12
 vacuum.etl_chuck_1_pos_16: 14
 vacuum.etl_chuck_2: 28
 
+vacuum.tfpx_stage_1: 17
+vacuum.tfpx_stage_2: 25
+vacuum.tfpx_stage_3: 27
+vacuum.tfpx_stage_4: 29
+vacuum.tfpx_stage_5: 31
+vacuum.tfpx_launch: 23
 
 motion.travel_speed: 75  # mm/s
 
@@ -90,8 +98,7 @@ survey_movement_speed: 20  # mm/s
 # The offset between the camera and the
 # center-of-rotation of the gantry head in x-y
 # and the bottom surface of the tool-holder in z
-geometry.tool_holder_offset: {-0.991,-101.890,-48.599}
-
+geometry.tool_holder_offset: {-0.878,-101.833,-48.599}
 geometry.picker_tool.center_offset: {0,0,49.9}
 
 
@@ -130,6 +137,8 @@ graph_motion.pos.tool_rack_pos_3_out: {955.889,171,36.435}
 graph_motion.pos.etl_chuck_1: {64,441,0}
 graph_motion.pos.etl_chuck_2: {409,545,0}
 
+graph_motion.pos.tfpx_stage_1: {723,552,0}
+graph_motion.pos.tfpx_stage_2: {820,445,0}
 
 # graph_motion.edge.LABEL1.LABEL2 True/False
 graph_motion.edge.home.tool_rack_pos_1_out: True
@@ -146,6 +155,11 @@ graph_motion.edge.tool_rack_pos_1_out.tool_rack_pos_3_out: True
 graph_motion.edge.etl_chuck_1.tool_rack_pos_1_out: True
 graph_motion.edge.etl_chuck_2.tool_rack_pos_1_out: True
 graph_motion.edge.etl_chuck_1.etl_chuck_2: True
+
+graph_motion.edge.etl_chuck_2.tfpx_stage_1: True
+graph_motion.edge.tfpx_stage_1.tfpx_stage_2: True
+graph_motion.edge.tool_rack_pos_1_out.tfpx_stage_1: True
+graph_motion.edge.tool_rack_pos_1_out.tfpx_stage_2: True
 
 #================================================
 #====== Potting procedure parameters
