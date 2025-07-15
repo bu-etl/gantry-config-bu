@@ -1,0 +1,56 @@
+# Load this file with the line:
+#
+# LOADCONFIG "" Config\ETL\D4_Site_Config.txt
+#
+# This file has the site-specific configuration data for the scripts in
+# ETLModules/Digital V4
+
+chuck_number.ETROC: 1
+
+default.Module_PCB.2.1.pos: {331.967077,448.649333,75.317618}
+default.Module_PCB.2.1.rot: {-0.000000,0.000000,0.000163,-1.000000}
+
+# default.Module_PCB.2.2.pos: {382.526220,448.811112,80.794428}
+# default.Module_PCB.2.2.rot: {-0.000000,-0.000000,0.000767,1.000000}
+
+# default.Module_PCB.2.3.pos: {433.380846,448.809385,80.719448}
+# default.Module_PCB.2.3.rot: {-0.000841,-0.000001,-0.000424,-1.000000}
+
+# default.Module_PCB.2.4.pos: {484.181755,448.843714,80.807680}
+# default.Module_PCB.2.4.rot: {-0.000001,-0.000000,-0.000404,-1.000000}
+
+#ETROC Center Positions
+default.ETROC.1.1.pos: {15.474862,282.883450,91.905902}
+default.ETROC.1.2.pos: {46.471792,282.972550,91.885897}
+default.ETROC.1.3.pos: {77.482837,283.064908,91.885905}
+default.ETROC.1.4.pos: {108.397354,283.162182,91.875908}
+#default.ETROC.1.5.pos: {14.583023,340.650527,91.927405}
+#default.ETROC.1.6.pos: {45.590556,340.831629,91.932405}
+#default.ETROC.1.7.pos: {76.591915,340.905167,91.932402}
+#default.ETROC.1.8.pos: {107.614391,340.982527,91.962397}
+#default.ETROC.1.9.pos: {14.363657,396.191299,91.947402}
+#default.ETROC.1.10.pos: {45.286321,396.313106,91.947403}
+#default.ETROC.1.11.pos: {76.430122,396.416316,91.947401}
+#default.ETROC.1.12.pos: {107.340236,396.511576,91.947401}
+#default.ETROC.1.13.pos: {14.305160,453.191064,91.947404}
+#default.ETROC.1.14.pos: {45.210050,453.249235,91.947402}
+#default.ETROC.1.15.pos: {76.233118,453.325662,91.947403}
+#default.ETROC.1.16.pos: {107.178210,453.489979,91.947403}
+
+#etroc rotations
+default.ETROC.1.1.rot: {-0.000000,0.000000,0.001508,0.999999}
+default.ETROC.1.2.rot: {-0.000000,0.000000,0.001508,0.999999}
+default.ETROC.1.3.rot: {-0.000001,-0.000000,1.000000,-0.000362}
+default.ETROC.1.4.rot: {-0.000001,-0.000000,1.000000,-0.000362}
+#default.ETROC.1.5.rot: {0.000513,0.000526,0.000665,-1.000000}
+#default.ETROC.1.6.rot: {-0.000000,-0.000000,0.000410,1.000000}
+#default.ETROC.1.7.rot: {-0.000000,-0.000000,0.000484,1.000000}
+#default.ETROC.1.8.rot: {-0.000000,-0.000000,0.002380,0.999997}
+#default.ETROC.1.9.rot: {-0.000000,0.000000,-1.000000,0.000422}
+#default.ETROC.1.10.rot: {-0.000000,-0.000000,-0.999993,0.003806}
+#default.ETROC.1.11.rot: {-0.000000,0.000000,-1.000000,0.000055}
+#default.ETROC.1.12.rot: {-0.000000,-0.000000,-1.000000,-0.000771}
+#default.ETROC.1.13.rot: {-0.000000,-0.000000,0.999997,-0.002327}
+#default.ETROC.1.14.rot: {-0.000000,0.000000,0.999998,-0.001753}
+#default.ETROC.1.15.rot: {-0.000000,-0.000000,-1.000000,0.000480}
+#default.ETROC.1.16.rot: {-0.000000,-0.000000,1.000000,0.000490}

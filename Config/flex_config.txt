@@ -6,15 +6,11 @@ enable_imaqdx: False
 camera.gantryhead.CameraGroup: 1
 camera.gantryhead.driver: peak
 camera.gantryhead.serial_number: "U3-328xCP-M|4108616891"
-# camera.gantryhead.config_file: "cam_config_gantryhead.cset"
 camera.gantryhead.FOV-x: 1.66
 camera.gantryhead.FOV-y: 1.40
 camera.gantryhead.horizontalMirror: False
-# camera.gantryhead.axes.invertY: True
 light.gantryhead.control: npaq
 light.gantryhead.hardware_address: Y.0
-
-
 
 
 manifold.reset_on_start: false
@@ -78,7 +74,11 @@ vacuum.tfpx_stage_2: 25
 vacuum.tfpx_stage_3: 27
 vacuum.tfpx_stage_4: 29
 vacuum.tfpx_stage_5: 31
+vacuum.tfpx_stage_6: 21
 vacuum.tfpx_launch: 23
+vacuum.tfpx_flipper: 16
+
+vacuum.gelpak_release: 30
 
 motion.travel_speed: 75  # mm/s
 
@@ -137,12 +137,12 @@ graph_motion.pos.tool_rack_pos_3_out: {955.889,171,36.435}
 graph_motion.pos.etl_chuck_1: {64,441,0}
 graph_motion.pos.etl_chuck_2: {409,545,0}
 
-graph_motion.pos.tfpx_stage_1: {723,552,0}
-graph_motion.pos.tfpx_stage_2: {820,445,0}
+graph_motion.pos.tfpx_fixture: {707,496,0}
 
 # graph_motion.edge.LABEL1.LABEL2 True/False
 graph_motion.edge.home.tool_rack_pos_1_out: True
 graph_motion.edge.home.etl_chuck_1: True
+graph_motion.edge.home.etl_chuck_2: True
 
 
 graph_motion.edge.tool_rack_pos_1_out.tool_rack_pos_1_in: True
@@ -156,10 +156,9 @@ graph_motion.edge.etl_chuck_1.tool_rack_pos_1_out: True
 graph_motion.edge.etl_chuck_2.tool_rack_pos_1_out: True
 graph_motion.edge.etl_chuck_1.etl_chuck_2: True
 
-graph_motion.edge.etl_chuck_2.tfpx_stage_1: True
-graph_motion.edge.tfpx_stage_1.tfpx_stage_2: True
-graph_motion.edge.tool_rack_pos_1_out.tfpx_stage_1: True
-graph_motion.edge.tool_rack_pos_1_out.tfpx_stage_2: True
+graph_motion.edge.tool_rack_pos_1_out.tfpx_fixture: True
+graph_motion.edge.etl_chuck_2.tfpx_fixture: True
+graph_motion.edge.home.tfpx_fixture: True
 
 #================================================
 #====== Potting procedure parameters
