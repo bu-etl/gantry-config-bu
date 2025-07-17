@@ -1,6 +1,6 @@
 [submodule "Scripts/TFPXModules"]
 	path = Scripts/TFPXModules
-	url = git@github.com:souvik1982/gscript-TFPXModules.git
+	url = ssh://git@gitlab.cern.ch:7999/cms_tk_ph2/gscript-tfpxmodules.git
 [submodule "Scripts/ETLModules"]
 	path = Scripts/ETLModules
 	url = git@github.com:bu-etl/gscript-ETLModules.git
