@@ -1,0 +1,27 @@
+s# Load this file with the line:
+#
+# LOADCONFIG "" Config\TFPX\RD53AAssembly_SingleGlass\Site_Config.txt
+#
+# This file has the site-specific configuration data for the scripts in
+# TFPXModules\RD53AAssembly_SingleGlass\
+
+vacuum.rd53a_chuck_1_TL: 23
+vacuum.rd53a_chuck_1_TR: 27
+vacuum.rd53a_chuck_1_BL: 25
+vacuum.rd53a_chuck_1_BR: 29
+
+vacuum.rd53a_chuck_2: 31
+vacuum.rd53a_chuck_3: 16
+
+HDI_start_pos: {0,0,0}
+HDI_start_rot: {0,0,1,0}
+HDI_translation_offset: {1,2,3}
+HDI_translation_rot: {0,0,1,0}
+
+geometry.TFPX_RD53AHDI.fid_tr: {9.841,-19.8415,0}
+geometry.TFPX_RD53AHDI.fid_br: {9.841,19.8415,0}
+geometry.TFPX_RD53AHDI.fid_bl: {-9.841,19.8415,0}
+geometry.TFPX_RD53AHDI.fid_tl: {-9.841,-19.8415,0}
+geometry.TFPX_RD53AHDI.thickness: 0.241
+geometry.TFPX_RD53AHDI.dim_bondHDI: {9.843,19.711,0}  #(width,length) # Dimensions of the HDI Bond Pads
+geometry.TFPX_RD53AHDI.len_bondpad_HDI: 0.77

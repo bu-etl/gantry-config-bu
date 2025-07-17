@@ -69,14 +69,15 @@ vacuum.etl_chuck_1_pos_15: 12
 vacuum.etl_chuck_1_pos_16: 14
 vacuum.etl_chuck_2: 28
 
-vacuum.tfpx_stage_1: 17
-vacuum.tfpx_stage_2: 25
-vacuum.tfpx_stage_3: 27
-vacuum.tfpx_stage_4: 29
-vacuum.tfpx_stage_5: 31
-vacuum.tfpx_stage_6: 21
-vacuum.tfpx_launch: 23
-vacuum.tfpx_flipper: 16
+vacuum.croc_1x2_chuck_0: 17
+vacuum.croc_1x2_chuck_1: 25
+vacuum.croc_1x2_chuck_2: 27
+vacuum.croc_1x2_chuck_3: 29
+vacuum.croc_1x2_chuck_4: 31
+vacuum.croc_launchROC_bot: 21
+vacuum.croc_launchROC_top: 19
+vacuum.croc_launchHDI: 23
+vacuum.croc_weight_0: 16
 
 vacuum.gelpak_release: 30
 
@@ -109,7 +110,7 @@ geometry.picker_tool.center_offset: {0,0,49.9}
 vision.debug_enable: False
 vision.findfid_result: ""
 # vision.findfid_result: Logs\
-vision.log_directory: C:\Users\cfang\Desktop\nebraska-silicon-lab\pixel-gantry-control\Logs\
+# vision.log_directory: Logs\
 vision.autofocus.step_size: 0.075 # mm
 vision.autofocus.delay: 50 # ms
 
@@ -137,7 +138,7 @@ graph_motion.pos.tool_rack_pos_3_out: {955.889,171,36.435}
 graph_motion.pos.etl_chuck_1: {64,441,0}
 graph_motion.pos.etl_chuck_2: {409,545,0}
 
-graph_motion.pos.tfpx_fixture: {707,496,0}
+graph_motion.pos.croc_1x2_fixture: {707,496,0}
 
 # graph_motion.edge.LABEL1.LABEL2 True/False
 graph_motion.edge.home.tool_rack_pos_1_out: True
@@ -156,9 +157,9 @@ graph_motion.edge.etl_chuck_1.tool_rack_pos_1_out: True
 graph_motion.edge.etl_chuck_2.tool_rack_pos_1_out: True
 graph_motion.edge.etl_chuck_1.etl_chuck_2: True
 
-graph_motion.edge.tool_rack_pos_1_out.tfpx_fixture: True
-graph_motion.edge.etl_chuck_2.tfpx_fixture: True
-graph_motion.edge.home.tfpx_fixture: True
+graph_motion.edge.tool_rack_pos_1_out.croc_1x2_fixture: True
+graph_motion.edge.etl_chuck_2.croc_1x2_fixture: True
+graph_motion.edge.home.croc_1x2_fixture: True
 
 #================================================
 #====== Potting procedure parameters

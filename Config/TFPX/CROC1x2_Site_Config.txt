@@ -1,0 +1,38 @@
+# Site-specific configuration data
+# Load with LOADCONFIG "" "Config\TFPX\CROC1x2_Site_Config.txt"
+
+
+## Initial Gantry Survey
+bolt_hole_origin: {-122.379580,626.663329,96.519087}
+top_pin_1x2_hdi_launch: {740.843257,518.178140,65.539277}
+
+focus_1x2_hdi_launch: 77.382407
+focus_1x2_chip_launch: 77.386206
+focus_1x2_chuck_0: 71.025121
+focus_1x2_chuck_1: 71.100003
+focus_1x2_chuck_2: 71.012520
+focus_1x2_chuck_3: 71.128905
+focus_1x2_chuck_4: 70.919231
+
+## GHCO Measurement
+# Calculated by adding `geometry.tool_holder_offset` and `geometry.picker_tool.center_offset`
+# and multiplying by -1 to be oriented as the scripts expect.
+ghco: {0.878000,101.833000,-1.301000}
+
+##Assembly Chuck Offset Measurement
+
+top_pin_1x2_hdi_launch: {740.841158,518.175342,65.508771}
+bottom_pin_1x2_hdi_launch: {740.742803,583.009236,65.417099}
+theta_1x2_hdi_launch: 0.086919 # degrees
+
+top_pin_chuck_0: {640.692976,518.033173,65.436156}
+bottom_pin_chuck_0: {640.690347,582.998672,65.439689}
+theta_chuck_0: -0.033211 # degrees
+
+## Drop Correction
+drop_correction: {0.001527,-0.014733,0.000000}
+drop_rotation: -0.003702 # degrees
+
+## Feedback from Assemble_1x2_mockup.gscript
+chip_offset: {-59.007,35.012,0.000}
+chip_angle: -0.402423 # degrees
