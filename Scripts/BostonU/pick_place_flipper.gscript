@@ -1,0 +1,85 @@
+#  Default corner positions for each stage
+COPY &croc_1x2_chuck_1_R {654.537,375.276,70.009}
+COPY &croc_1x2_chuck_1_L {629.467,375.076,70.009}
+COPY &croc_1x2_chuck_2_R {705,375,70}
+COPY &croc_1x2_chuck_2_L {680,375,70}
+COPY &croc_1x2_chuck_3_R {754,376,69.971}
+COPY &croc_1x2_chuck_3_L {729,376,69.971}
+COPY &croc_1x2_chuck_4_R {803,376,69.971}
+COPY &croc_1x2_chuck_4_L {778,376,69.971}
+
+COPY &croc_weight_0_L {931.596,525.750,68.470}
+COPY &croc_weight_0_R {956.656,525.750,68.260}
+
+SETVAC croc_weight_0 1
+
+GETINTPOPUP $stagenum "Enter stage number of slide you want to pick up (1-4)"
+
+SETVAC croc_weight_0 1
+SETVAC croc_1x2_chuck_{$stagenum} 1
+
+HOME if-needed
+
+MOVETO &croc_1x2_chuck_{$stagenum}_R 75
+ALERT "Measure top right corner of moving slide"
+VIDEO
+GETPOS $tr1
+
+MOVETO &croc_1x2_chuck_{$stagenum}_L 75
+ALERT "Measure top left corner of moving slide"
+VIDEO
+GETPOS $tl1
+
+MOVETO &croc_weight_0_R 75
+ALERT "Measure top right of flipper slide"
+VIDEO
+GETPOS $tr2
+
+MOVETO &croc_weight_0_L 75
+ALERT "Measure top left of flipper slide"
+VIDEO
+GETPOS $tl2
+
+SUB $dr1 $tl1 $tr1
+MUL $dr1half $dr1 {0.5,0.5,1}
+COPY $dr1halfrot {$dr1half.y,$dr1half.x,$dr1half.z}
+MUL $dr1halfrot $dr1halfrot {1,-1,1}
+MUL $dr1halfrot $dr1halfrot {2.026,2.026,1}
+ADD $pickpoint $dr1half $dr1halfrot
+ADD $pickpoint $tr1 $pickpoint
+ATAN2 $theta1 $dr1half.x $dr1half.y
+
+SUB $dr2 $tl2 $tr2
+MUL $dr2half $dr2 {0.5,0.5,1}
+COPY $dr2halfrot {$dr2half.y,$dr2half.x,$dr2half.z}
+MUL $dr2halfrot $dr2halfrot {1,-1,1}
+MUL $dr2halfrot $dr2halfrot {2.026,2.026,1}
+ADD $placepoint $dr2half $dr2halfrot
+ADD $placepoint $tr2 $placepoint
+SUB $placepoint $placepoint {0,0,1}
+ATAN2 $theta2 $dr2half.x $dr2half.y
+
+PRINT "Theta1 = %r deg    Theta2 =%r deg" $theta1 $theta2
+
+ABS $abstheta1 $theta1
+COPY $sign1 `$theta1/$abstheta1` 
+COPY $theta1r `180*$sign1`
+COPY $theta1 `$theta1r-$theta1` 
+COPY $theta1 `-1*$theta1`
+
+ABS $abstheta2 $theta2
+COPY $sign2 `$theta2/$abstheta2` 
+COPY $theta2r `180*$sign2`
+COPY $theta2 `$theta2r-$theta2` 
+COPY $theta2 `-1*$theta2`
+
+SUB $rot $theta2 $theta1
+PRINT "Theta1 = %r deg    Theta2 =%r deg" $theta1 $theta2
+
+@label LOADTOOL picker_tool
+
+ADD $pickpoint $pickpoint {0,0,0.5}
+
+PICKPART $pickpoint $theta1 croc_1x2_chuck_{$stagenum}
+PLACEPART $placepoint $theta2 
+UNLOADTOOL picker_tool

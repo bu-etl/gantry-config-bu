@@ -1,0 +1,91 @@
+VERSION v2.8
+CLEARLOG
+SETLOG "ETL_digital_module_assembly"
+LOADCONFIG "" "Scripts\BostonU\digital_module\digital_module_config.txt"
+
+COPY &geometry.module_pcb_v4p4.fid_tr {20.96,-25.72,0}
+COPY &geometry.module_pcb_v4p4.fid_tl {-20.34,-25.72,0}
+COPY &geometry.module_pcb_v4p4.fid_br {20.34,25.72,0}
+COPY &geometry.module_pcb_v4p4.fid_bl {-20.96,25.72,0}
+
+
+
+COPY $pcb_default_pos {382.640039,449.061107,76.620750}
+COPY $pcb_default_rot {-0.000130,-0.003305,0.000284,0.999994}
+
+COPY &geometry.etroc2p01.fid_tr {10.5,-11.63,0}
+COPY &geometry.etroc2p01.fid_tl {-10.5,-11.63,0}
+COPY &geometry.etroc2p01.fid_br {10.5,11.63,0}
+COPY &geometry.etroc2p01.fid_bl {-10.5,11.63,0}
+
+COPY $etroc_default_pos {15.484689,282.863624,91.854208}
+COPY $etroc_default_rot {0.000001,-0.000001,0.001545,0.999999}
+
+
+COPY $target_local {10.84,11.83,0}
+
+HOME if-needed
+
+## Measure 4 fiducials of PCB
+
+MOVENAME etl_chuck_2
+SETVAC etl_chuck_2 1
+TRANSFORML2G $pcb_tr &geometry.module_pcb_v4p4.fid_tr $pcb_default_pos $pcb_default_rot
+TRANSFORML2G $pcb_tl &geometry.module_pcb_v4p4.fid_tl $pcb_default_pos $pcb_default_rot
+TRANSFORML2G $pcb_br &geometry.module_pcb_v4p4.fid_br $pcb_default_pos $pcb_default_rot
+TRANSFORML2G $pcb_bl &geometry.module_pcb_v4p4.fid_bl $pcb_default_pos $pcb_default_rot
+
+MOVETO $pcb_tr 20
+VIDEO ""  pcb_fid_tr
+GETPOS $pcb_tr
+
+MOVETO $pcb_tl 20
+VIDEO ""  pcb_fid_tl
+GETPOS $pcb_tl
+
+MOVETO $pcb_br 20
+VIDEO ""  pcb_fid_br
+GETPOS $pcb_br
+
+MOVETO $pcb_bl 20
+VIDEO ""  pcb_fid_bl
+GETPOS $pcb_bl
+
+## Measure 4 corners of ETROC
+MOVENAME etl_chuck_1
+SETVAC etl_chuck_1_pos_1 1
+TRANSFORML2G $etroc_tr &geometry.etroc2p01.fid_tr $etroc_default_pos $etroc_default_rot
+TRANSFORML2G $etroc_tl &geometry.etroc2p01.fid_tl $etroc_default_pos $etroc_default_rot
+TRANSFORML2G $etroc_br &geometry.etroc2p01.fid_br $etroc_default_pos $etroc_default_rot
+TRANSFORML2G $etroc_bl &geometry.etroc2p01.fid_bl $etroc_default_pos $etroc_default_rot
+
+MOVETO $etroc_tr 20
+VIDEO
+GETPOS $etroc_tr
+
+MOVETO $etroc_tl 20
+VIDEO
+GETPOS $etroc_tl
+
+MOVETO $etroc_br 20
+VIDEO
+GETPOS $etroc_br
+
+MOVETO $etroc_bl 20
+VIDEO
+GETPOS $etroc_bl
+
+
+## Perform fits
+FIT $pcb_pos $pcb_rot $pcb_res module_pcb_v4p4 $pcb_tr $pcb_br $pcb_bl $pcb_tl
+FIT $etroc_pos $etroc_rot $etroc_res etroc2p01 $etroc_tr $etroc_br $etroc_bl $etroc_tl
+
+## Calculate target position in global coordinates
+TRANSFORML2G $target_pos $target_local $pcb_pos $pcb_rot
+## Pick part
+LOADTOOL picker_tool
+PICKPART $etroc_pos $etroc_rot etl_chuck_1_pos_1 etl_chuck_1
+## Place part
+PLACEPART $target_pos $pcb_rot "" etl_chuck_2
+
+UNLOADTOOL

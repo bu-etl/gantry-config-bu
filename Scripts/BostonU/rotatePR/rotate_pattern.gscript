@@ -1,0 +1,93 @@
+COPY $fid_tl {311.488565,423.084635,75.341604}
+COPY $fid_tr {352.497896,422.712399,75.425369}
+COPY $fid_bl {311.097902,473.812405,75.476596}
+COPY $fid_br {351.597901,473.612401,75.421212}
+
+HOME if-needed
+MOVENAME etl_chuck_2
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+MOVETO $fid_tl 100
+SETLIGHT 30 gantryhead
+AUTOFOCUS $focus 2 0 autoclose
+SNAPSHOT gantryhead search.png
+
+EXEC "python C:\Users\User\Desktop\gantry-config-bu\Scripts\BostonU\rotatePR\template.py --corner tl --scaledown .05"
+LOADCONFIG "" "Scripts\BostonU\rotatePR\config\fid_loc.txt"
+
+FLEXREAD $tl_dif_x fidx
+FLEXREAD $tl_dif_y fidy
+FLEXREAD $cornerstr cor
+PRINT %d $cornerstr
+GETPOS $curr
+ADD $tl_fid_loc $curr {$tl_dif_x,$tl_dif_y,0}
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+MOVETO $fid_tr 100
+SETLIGHT 30 gantryhead
+AUTOFOCUS $focus 2 0 autoclose
+SNAPSHOT gantryhead search.png
+
+EXEC "python C:\Users\User\Desktop\gantry-config-bu\Scripts\BostonU\rotatePR\template.py --corner tr --scaledown .05"
+LOADCONFIG "" "Scripts\BostonU\rotatePR\config\fid_loc.txt"
+
+FLEXREAD $tr_dif_x fidx
+FLEXREAD $tr_dif_y fidy
+FLEXREAD $cornerstr cor
+PRINT %d $cornerstr
+GETPOS $curr
+ADD $tr_fid_loc $curr {$tr_dif_x,$tr_dif_y,0}
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+MOVETO $fid_br 100
+SETLIGHT 30 gantryhead
+AUTOFOCUS $focus 2 0 autoclose
+SNAPSHOT gantryhead search.png
+
+EXEC "python C:\Users\User\Desktop\gantry-config-bu\Scripts\BostonU\rotatePR\template.py --corner br --scaledown .05"
+LOADCONFIG "" "Scripts\BostonU\rotatePR\config\fid_loc.txt"
+
+FLEXREAD $br_dif_x fidx
+FLEXREAD $br_dif_y fidy
+FLEXREAD $cornerstr cor
+PRINT %d $cornerstr
+GETPOS $curr
+ADD $br_fid_loc $curr {$br_dif_x,$br_dif_y,0}
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+MOVETO $fid_bl 100
+SETLIGHT 30 gantryhead
+AUTOFOCUS $focus 2 0 autoclose
+SNAPSHOT gantryhead search.png
+
+EXEC "python C:\Users\User\Desktop\gantry-config-bu\Scripts\BostonU\rotatePR\template.py --corner bl --scaledown .05"
+LOADCONFIG "" "Scripts\BostonU\rotatePR\config\fid_loc.txt"
+
+FLEXREAD $bl_dif_x fidx
+FLEXREAD $bl_dif_y fidy
+FLEXREAD $cornerstr cor
+PRINT %d $cornerstr
+
+GETPOS $curr
+ADD $bl_fid_loc $curr {$bl_dif_x,$bl_dif_y,0}
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+MOVETO $tl_fid_loc 75
+VIDEO
+
+MOVETO $tr_fid_loc 75
+VIDEO
+
+MOVETO $br_fid_loc 75
+VIDEO
+
+MOVETO $bl_fid_loc 75
+VIDEO
+
+

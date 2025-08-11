@@ -1,0 +1,88 @@
+COPY $fid_tl {311.488565,423.084635,75.341604}
+COPY $fid_tr {352.497896,422.712399,75.425369}
+COPY $fid_bl {311.097902,473.812405,75.476596}
+COPY $fid_br {351.597901,473.612401,75.421212}
+
+HOME if-needed
+MOVENAME etl_chuck_2
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+MOVETO $fid_tl 75
+SETLIGHT 30 gantryhead
+AUTOFOCUS $focus 1 0 autoclose
+SNAPSHOT gantryhead tl_search.png
+
+# EXEC "python C:\Users\User\Desktop\gantry-config-bu\Scripts\BostonU\pattern_recog\pcb_tl_fid.py"
+LOADCONFIG "" "Scripts\BostonU\pattern_recog\config\tl_fid_loc.txt"
+
+FLEXREAD $tl_dif_x tl_x
+FLEXREAD $tl_dif_y tl_y
+
+GETPOS $curr
+ADD $tl_fid_loc $curr {$tl_dif_x,$tl_dif_y,0}
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+MOVETO $fid_tr 75
+SETLIGHT 30 gantryhead
+AUTOFOCUS $focus 1 0 autoclose
+SNAPSHOT gantryhead tr_search.png
+
+# EXEC "python C:\Users\User\Desktop\gantry-config-bu\Scripts\BostonU\pattern_recog\pcb_tr_fid.py"
+LOADCONFIG "" "Scripts\BostonU\pattern_recog\config\tr_fid_loc.txt"
+
+FLEXREAD $tr_dif_x tr_x
+FLEXREAD $tr_dif_y tr_y
+
+GETPOS $curr
+ADD $tr_fid_loc $curr {$tr_dif_x,$tr_dif_y,0}
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+MOVETO $fid_br 75
+SETLIGHT 30 gantryhead
+AUTOFOCUS $focus 1 0 autoclose
+SNAPSHOT gantryhead br_search.png
+
+# EXEC "python C:\Users\User\Desktop\gantry-config-bu\Scripts\BostonU\pattern_recog\pcb_br_fid.py"
+LOADCONFIG "" "Scripts\BostonU\pattern_recog\config\br_fid_loc.txt"
+
+FLEXREAD $br_dif_x br_x
+FLEXREAD $br_dif_y br_y
+
+GETPOS $curr
+ADD $br_fid_loc $curr {$br_dif_x,$br_dif_y,0}
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+MOVETO $fid_bl 75
+SETLIGHT 30 gantryhead
+AUTOFOCUS $focus 1 0 autoclose
+SNAPSHOT gantryhead bl_search.png
+
+# EXEC "python C:\Users\User\Desktop\gantry-config-bu\Scripts\BostonU\pattern_recog\pcb_bl_fid.py"
+LOADCONFIG "" "Scripts\BostonU\pattern_recog\config\bl_fid_loc.txt"
+
+FLEXREAD $bl_dif_x bl_x
+FLEXREAD $bl_dif_y bl_y
+
+GETPOS $curr
+ADD $bl_fid_loc $curr {$bl_dif_x,$bl_dif_y,0}
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+
+MOVETO $tl_fid_loc 75
+VIDEO
+
+MOVETO $tr_fid_loc 75
+VIDEO
+
+MOVETO $br_fid_loc 75
+VIDEO
+
+MOVETO $bl_fid_loc 75
+VIDEO
+
+

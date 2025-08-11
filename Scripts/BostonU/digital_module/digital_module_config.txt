@@ -1,0 +1,4 @@
+reference_image.pcb_fid_tr: Scripts\BostonU\digital_module\pcb_fid_tr.png
+reference_image.pcb_fid_tl: Scripts\BostonU\digital_module\pcb_fid_tl.png
+reference_image.pcb_fid_br: Scripts\BostonU\digital_module\pcb_fid_br.png
+reference_image.pcb_fid_bl: Scripts\BostonU\digital_module\pcb_fid_bl.png

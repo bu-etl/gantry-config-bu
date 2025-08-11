@@ -1,0 +1,84 @@
+#  Default corner positions for each stage
+COPY &tfpx_stage_1_R {654,527,69.971}
+COPY &tfpx_stage_1_L {629,527,69.971}
+COPY &tfpx_stage_2_R {654.537,375.276,70.009}
+COPY &tfpx_stage_2_L {629.467,375.076,70.009}
+COPY &tfpx_stage_3_R {705,375,70}
+COPY &tfpx_stage_3_L {680,375,70}
+COPY &tfpx_stage_4_R {754,376,69.971}
+COPY &tfpx_stage_4_L {729,376,69.971}
+COPY &tfpx_stage_5_R {803,376,69.971}
+COPY &tfpx_stage_5_L {778,376,69.971}
+COPY &tfpx_launch_R {752,527,76.280}
+COPY &tfpx_launch_L {727,527,76.280}
+
+COPY $measure 1
+
+GETINTPOPUP $stagenum "Enter the stage number of the slide you want to glue to:"
+CHOICEPOPUP $measure "Do you need to measure?" "YES" "NO"
+
+SETVAC tfpx_launch 1
+SETVAC tfpx_stage_{$stagenum} 1
+HOME if-needed
+
+
+
+GOTOIFN @label $measure
+
+MOVETO &tfpx_launch_R 75
+PRINT "Move to top-right corner on launch slide"
+VIDEO
+GETPOS $tr1
+MOVETO &tfpx_launch_L 75
+PRINT "Move to top-left corner on launch slide"
+VIDEO
+GETPOS $tl1
+MOVETO &tfpx_stage_{$stagenum}_R 75
+PRINT "Move to top-right corner on stage %d slide" $stagenum
+VIDEO
+GETPOS $tr2
+MOVETO &tfpx_stage_{$stagenum}_L 75
+PRINT "Move to top-left corner on stage %d slide" $stagenum
+VIDEO
+GETPOS $tl2
+
+SUB $dr1 $tl1 $tr1
+MUL $dr1half $dr1 {0.5,0.5,1}
+COPY $dr1halfrot {$dr1half.y,$dr1half.x,$dr1half.z}
+MUL $dr1halfrot $dr1halfrot {1,-1,1}
+MUL $dr1halfrot $dr1halfrot {2.026,2.026,1}
+ADD $pickpoint $dr1half $dr1halfrot
+ADD $pickpoint $tr1 $pickpoint
+ATAN2 $theta1 $dr1half.x $dr1half.y
+
+SUB $dr2 $tl2 $tr2
+MUL $dr2half $dr2 {0.5,0.5,1}
+COPY $dr2halfrot {$dr2half.y,$dr2half.x,$dr2half.z}
+MUL $dr2halfrot $dr2halfrot {1,-1,1}
+MUL $dr2halfrot $dr2halfrot {2.026,2.026,1}
+ADD $placepoint $dr2half $dr2halfrot
+ADD $placepoint $tr2 $placepoint
+SUB $placepoint $placepoint {0,0,1}
+ATAN2 $theta2 $dr2half.x $dr2half.y
+
+PRINT "Theta1 = %r deg    Theta2 =%r deg" $theta1 $theta2
+
+ABS $abstheta1 $theta1
+COPY $sign1 `$theta1/$abstheta1` 
+COPY $theta1r `180*$sign1`
+COPY $theta1 `$theta1r-$theta1` 
+COPY $theta1 `-1*$theta1`
+
+ABS $abstheta2 $theta2
+COPY $sign2 `$theta2/$abstheta2` 
+COPY $theta2r `180*$sign2`
+COPY $theta2 `$theta2r-$theta2` 
+COPY $theta2 `-1*$theta2`
+
+SUB $rot $theta2 $theta1
+PRINT "Theta1 = %r deg    Theta2 =%r deg" $theta1 $theta2
+
+@label LOADTOOL picker_tool
+PICKPART $pickpoint $theta1 tfpx_launch
+PLACEPART $placepoint  $theta2 
+UNLOADTOOL picker_tool

@@ -1,0 +1,42 @@
+#  Default corner positions for each stage
+COPY &croc_1x2_chuck_0_BR {654,567,69.971}
+COPY &croc_1x2_chuck_0_TL {629,527,69.971}
+COPY &croc_1x2_chuck_1_BR {654.537,425.276,70.009}
+COPY &croc_1x2_chuck_1_TL {629.467,375.076,70.009}
+COPY &croc_1x2_chuck_2_BR {705.077,425.173,70.000}
+COPY &croc_1x2_chuck_2_TL {680,375,70}
+COPY &croc_1x2_chuck_3_BR {753.988,424.999,69.971}
+COPY &croc_1x2_chuck_3_TL {729,376,69.971}
+COPY &croc_1x2_chuck_4_BR {804.635,424.565,69.971}
+COPY &croc_1x2_chuck_4_TL {778,376,69.971}
+COPY &croc_launchROC_TL {677.127254,527.599994,76.366049}
+COPY &croc_launchROC_BR {702.137249,567.547507,76.366049}
+COPY &croc_launchHDI_BR {752,567,76.280}
+COPY &croc_launchHDI_TL {727,527,76.280}
+
+SETVAC croc_weight_0 0
+
+GETINTPOPUP $stagenum "Enter the stage number of the slide you want to survey:"
+
+SETVAC croc_1x2_chuck_{$stagenum} 1
+
+HOME if-needed
+
+MOVENAME croc_1x2_fixture
+
+MOVETO &croc_1x2_chuck_{$stagenum}_TL 75
+PRINT "Move to top-left glue deposit"
+VIDEO
+GETPOS $tl
+
+MOVETO &croc_1x2_chuck_{$stagenum}_BR 75
+PRINT "Move to bottom-right glue deposit"
+VIDEO
+GETPOS $br
+
+ADD $sum $tl $br
+MUL $avg $sum {.5,.5,.5}
+
+MOVETO $avg
+
+PRINT "Enter survey command."
